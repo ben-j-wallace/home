@@ -1,0 +1,13 @@
+name: "resume"
+title: "Ben Wallace"
+description: |
+  Ben Wallace
+output_dir: "docs"
+theme: styles.css
+navbar:
+  right:
+    - text: "Bio"
+      href: index.html
+    - text: "Projects"
+      href: projects.html
+output: distill::distill_article

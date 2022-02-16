@@ -1,0 +1,28 @@
+---
+title: "Ben Wallace"
+image: "imgs/me.jpg"
+description: |
+  Ben Wallace
+links:
+  - label: Resume
+    url: "https://www.linkedin.com/in/wallacebenjamin/"
+  - label: Blog
+    url: "https://benwallacnc.medium.com/"
+  - label: Github
+    url: "https://github.com/ben-j-wallace"
+  - label: Contact
+    url: "mailto:ben.wallace@duke.edu"
+output:
+  postcards::trestles:
+    css: "styles.css"
+site: distill::distill_website
+self_contained: false
+---
+
+## About Me
+
+I am currently a student at Duke University pursuing a self-designed degree titled [Constructions of Race and Racial Attitudes in the United States](https://drive.google.com/file/d/17N7oFHydCEBg0QAvFhHnpAuuQwTG5Xh3/view?usp=sharing).
+
+My research primarily explores the intertwining histories of racial violence and structural racism using computational and archival methods. I am also interested in how racial ideologies are reproduced and reworked across space and time. After Duke, I plan to continue this research through  graduate studies.
+
+Outside of class, I love listening to music, exploring restaurants in Durham, and playing guitar.
