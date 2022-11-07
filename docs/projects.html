@@ -50,16 +50,17 @@ pre.numberSource code > span > a:first-child::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {   }
+  { color: #00769e; background-color: #f1f3f5; }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
+code span { color: #00769e; } /* Normal */
 code span.al { color: #ad0000; } /* Alert */
 code span.an { color: #5e5e5e; } /* Annotation */
-code span.at { color: #20794d; } /* Attribute */
+code span.at { color: #657422; } /* Attribute */
 code span.bn { color: #ad0000; } /* BaseN */
 code span.bu { } /* BuiltIn */
-code span.cf { color: #007ba5; } /* ControlFlow */
+code span.cf { color: #00769e; } /* ControlFlow */
 code span.ch { color: #20794d; } /* Char */
 code span.cn { color: #8f5902; } /* Constant */
 code span.co { color: #5e5e5e; } /* Comment */
@@ -73,17 +74,18 @@ code span.fl { color: #ad0000; } /* Float */
 code span.fu { color: #4758ab; } /* Function */
 code span.im { } /* Import */
 code span.in { color: #5e5e5e; } /* Information */
-code span.kw { color: #007ba5; } /* Keyword */
+code span.kw { color: #00769e; } /* Keyword */
 code span.op { color: #5e5e5e; } /* Operator */
-code span.ot { color: #007ba5; } /* Other */
+code span.ot { color: #00769e; } /* Other */
 code span.pp { color: #ad0000; } /* Preprocessor */
-code span.sc { color: #20794d; } /* SpecialChar */
+code span.sc { color: #5e5e5e; } /* SpecialChar */
 code span.ss { color: #20794d; } /* SpecialString */
 code span.st { color: #20794d; } /* String */
 code span.va { color: #111111; } /* Variable */
 code span.vs { color: #20794d; } /* VerbatimString */
 code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </style>
+
 
   <!--radix_placeholder_meta_tags-->
   <title>Ben Wallace: Works</title>
@@ -452,7 +454,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
   </style>
 
-  <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+  <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
   <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet"/>
   <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet"/>
   <script src="site_libs/headroom-0.9.4/headroom.min.js"></script>
@@ -783,6 +785,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   d-article table.gt_table td,
   d-article table.gt_table th {
     border-bottom: none;
+    font-size: 100%;
   }
 
   .html-widget {
@@ -1024,10 +1027,6 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     position: relative;
     margin-bottom: 2.5em;
     margin-top: 1.5em;
-  }
-
-  .figure img {
-    width: 100%;
   }
 
   .figure .caption {
@@ -1859,7 +1858,22 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
       // hoverable references
       $('span.citation[data-cites]').each(function() {
-        var refHtml = $('#ref-' + $(this).attr('data-cites')).html();
+        const citeChild = $(this).children()[0]
+        // Do not process if @xyz has been used without escaping and without bibliography activated
+        // https://github.com/rstudio/distill/issues/466
+        if (citeChild === undefined) return true
+
+        if (citeChild.nodeName == "D-FOOTNOTE") {
+          var fn = citeChild
+          $(this).html(fn.shadowRoot.querySelector("sup"))
+          $(this).id = fn.id
+          fn.remove()
+        }
+        var refs = $(this).attr('data-cites').split(" ");
+        var refHtml = refs.map(function(ref) {
+          // Could use CSS.escape too here, we insure backward compatibility in navigator
+          return "<p>" + $('div[id="ref-' + ref + '"]').html() + "</p>";
+        }).join("\n");
         window.tippy(this, {
           allowHTML: true,
           content: refHtml,
@@ -1870,6 +1884,31 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
           placement: 'bottom-start'
         });
       });
+
+      // fix footnotes in tables (#411)
+      // replacing broken distill.pub feature
+      $('table d-footnote').each(function() {
+        // we replace internal showAtNode methode which is triggered when hovering a footnote
+        this.hoverBox.showAtNode = function(node) {
+          // ported from https://github.com/distillpub/template/pull/105/files
+          calcOffset = function(elem) {
+              let x = elem.offsetLeft;
+              let y = elem.offsetTop;
+              // Traverse upwards until an `absolute` element is found or `elem`
+              // becomes null.
+              while (elem = elem.offsetParent && elem.style.position != 'absolute') {
+                  x += elem.offsetLeft;
+                  y += elem.offsetTop;
+              }
+
+              return { left: x, top: y };
+          }
+          // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetTop
+          const bbox = node.getBoundingClientRect();
+          const offset = calcOffset(node);
+          this.show([offset.left + bbox.width, offset.top + bbox.height]);
+        }
+      })
 
       // clear polling timer
       clearInterval(tid);
@@ -1969,6 +2008,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     // mark non-body figures created by knitr chunks as 100% width
     $('.layout-chunk').each(function(i, val) {
       var figures = $(this).find('img, .html-widget');
+      // ignore leaflet img layers (#106)
+      figures = figures.filter(':not(img[class*="leaflet"])')
       if ($(this).attr('data-layout') !== "l-body") {
         figures.css('width', '100%');
       } else {
@@ -1991,7 +2032,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     // get rid of index.html references in header
     if (window.location.protocol !== "file:") {
       $('.distill-site-header a[href]').each(function(i,val) {
-        $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
+        $(this).attr('href', $(this).attr('href').replace(/^index[.]html/, "./"));
       });
     }
 
@@ -2437,7 +2478,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     color: var(--hover-color, white);
   }</style>
   <!--/radix_placeholder_distill-->
-  <script src="site_libs/header-attrs-2.8/header-attrs.js"></script>
+  <script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
   <script src="site_libs/popper-2.6.0/popper.min.js"></script>
   <link href="site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
   <link href="site_libs/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
@@ -2487,82 +2528,43 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 
 <div class="d-article">
-<p>Read below about some of the papers and projects that I have worked
-on over the past three years. If you see anything that interests you or
-if you want to work together, feel free to contact me at
-<code>ben [dot] wallace [at] duke.edu</code>.</p>
+<p>Read below about some of the papers and projects that I have worked on over the past three years. If you see anything that interests you or if you want to work together, feel free to contact me at <code>ben [dot] wallace [at] duke.edu</code>.</p>
 <h2 id="working-papers">Working Papers</h2>
-<h3
-id="for-pride-and-for-profit-white-elites-and-motivations-for-urban-segregation">For
-Pride and for Profit: White Elites and Motivations for Urban
-Segregation</h3>
+<h3 id="teaching-race-white-adolescents-and-learning-race-in-history-curriculum">Teaching Race: White Adolescents and Learning Race in History Curriculum</h3>
+<p><em>Independent study, supervised by <a href="https://scholars.duke.edu/person/sarah.gaither">Dr. Sarah Gaither</a></em></p>
 <blockquote>
-<p>The history of Chicago’s white elites not only interrupts the popular
-notion that segregation was limited to the Jim Crow South, but also that
-segregation in northern cities resulted from New-Deal age practices. By
-the 1930’s, practices enforcing the National Housing Act like red-lining
-bolstered pre-existing projects of white self-interest.</p>
+<p>This paper begins with a review of racial and ethnic socialization (RES), particularly among white adolescents, and directs it towards a discussion of how pedagogy exists as race-making and socializing practice. Synthesis of psychological, sociological, and educational scholarship reveals thatteachershave a limited effect on white adolescents’ interpretations of history</p>
 </blockquote>
-<p><a
-href="https://docs.google.com/document/d/13w6GA4yNXaaeKzyZI9M2Q9DD6Gz5G-AE/edit?usp=sharing&amp;ouid=108484891164098853968&amp;rtpof=true&amp;sd=true">Read</a></p>
-<h3 id="collective-violence-mob-formation-of-lynchings">Collective
-Violence: Mob Formation of Lynchings</h3>
+<h3 id="for-pride-and-for-profit-white-elites-and-motivations-for-urban-segregation">For Pride and for Profit: White Elites and Motivations for Urban Segregation</h3>
 <blockquote>
-<p>After reviewing the history of lynching and sociological perspectives
-of mob formation, I put historical understandings about private and
-spectacle lynchings to statistical review. Using an ordered logistic
-model, I demonstrate that Black lynching victims as well as those
-accused of murder and violations of the interracial sexual color line
-drew larger mob sizes in the United States, supporting perspectives that
-tie lynchings to the reinforcement of national white supremacist
-ideologies.</p>
+<p>The history of Chicago’s white elites not only interrupts the popular notion that segregation was limited to the Jim Crow South, but also that segregation in northern cities resulted from New-Deal age practices. By the 1930’s, practices enforcing the National Housing Act like red-lining bolstered pre-existing projects of white self-interest.</p>
 </blockquote>
-<p><a
-href="https://dssoc.github.io/project_examples/ben_wallace.html">Read</a></p>
-<h3 id="data-visualizations-in-the-age-of-mass-incarceration">Data
-Visualizations in the Age of Mass Incarceration</h3>
+<p><a href="https://docs.google.com/document/d/13w6GA4yNXaaeKzyZI9M2Q9DD6Gz5G-AE/edit?usp=sharing&amp;ouid=108484891164098853968&amp;rtpof=true&amp;sd=true">Read</a></p>
+<h3 id="collective-violence-mob-formation-of-lynchings">Collective Violence: Mob Formation of Lynchings</h3>
 <blockquote>
-<p>In the century since the “American Negro Exhibit,” the practice of
-data visualization has dramatically evolved in tandem with developments
-in graphic design, social statistics, and the statistical knowledge
-state. This paper addresses the prospects, limitations, and implications
-of using data visualization in representing bodies and discourses
-surrounding the carceral system. Specifically, I ask how these portraits
-intervene in representations of those the system entangles, a system
-which so frequently neglects humanity to those it holds captive.</p>
+<p>After reviewing the history of lynching and sociological perspectives of mob formation, I put historical understandings about private and spectacle lynchings to statistical review. Using an ordered logistic model, I demonstrate that Black lynching victims as well as those accused of murder and violations of the interracial sexual color line drew larger mob sizes in the United States, supporting perspectives that tie lynchings to the reinforcement of national white supremacist ideologies.</p>
 </blockquote>
-<p><a
-href="https://ben-j-wallace.github.io/carceral-system-visualization/">Read</a></p>
-<h3 id="multiple-sovereignties-in-bolivia">Multiple Sovereignties in
-Bolivia</h3>
+<p><a href="https://dssoc.github.io/project_examples/ben_wallace.html">Read</a></p>
+<h3 id="data-visualizations-in-the-age-of-mass-incarceration">Data Visualizations in the Age of Mass Incarceration</h3>
 <blockquote>
-<p>By looking at the successes and continuing obstacles for indigenous
-movements throughout Morales’ administration, we can better understand
-how indigenous advocates can navigate conflicting versions of
-sovereignty today in Bolivia’s tumultuous political environment, as well
-as how other marginalized communities can similarly seek justice in an
-increasingly globalized and resource-driven world.</p>
+<p>In the century since the “American Negro Exhibit,” the practice of data visualization has dramatically evolved in tandem with developments in graphic design, social statistics, and the statistical knowledge state. This paper addresses the prospects, limitations, and implications of using data visualization in representing bodies and discourses surrounding the carceral system. Specifically, I ask how these portraits intervene in representations of those the system entangles, a system which so frequently neglects humanity to those it holds captive.</p>
 </blockquote>
-<p><a
-href="https://drive.google.com/file/d/108fLp6WDvk1lE4A1HE6P6aSQGsEyrnLu/view?usp=sharing">Read</a></p>
+<p><a href="https://ben-j-wallace.github.io/carceral-system-visualization/">Read</a></p>
+<h3 id="multiple-sovereignties-in-bolivia">Multiple Sovereignties in Bolivia</h3>
+<blockquote>
+<p>By looking at the successes and continuing obstacles for indigenous movements throughout Morales’ administration, we can better understand how indigenous advocates can navigate conflicting versions of sovereignty today in Bolivia’s tumultuous political environment, as well as how other marginalized communities can similarly seek justice in an increasingly globalized and resource-driven world.</p>
+</blockquote>
+<p><a href="https://drive.google.com/file/d/108fLp6WDvk1lE4A1HE6P6aSQGsEyrnLu/view?usp=sharing">Read</a></p>
 <h2 id="projects">Projects</h2>
-<h3 id="archival-research-shame-of-chicago-documentary">Archival
-Research, <a href="http://www.shameofchicago.org/">Shame of Chicago
-Documentary</a></h3>
+<h3 id="archival-research-shame-of-chicago-documentary">Archival Research, Shame of Chicago Documentary</h3>
+<p><a href="https://www.shameofchicago.org/">Watch</a></p>
 <h3 id="closeted-podcast">Closeted Podcast</h3>
-<p>Five years after the Supreme Court granted marriage equality to
-same-sex couples, I speak with a closeted student and learn about how
-internalized homophobia persists in our current era.</p>
+<p>Five years after the Supreme Court granted marriage equality to same-sex couples, I speak with a closeted student and learn about how internalized homophobia persists in our current era.</p>
 <p><a href="https://soundcloud.com/benjwallace/closeted">Listen</a></p>
-<h3 id="visualizing-probability-distributions-with-ggplot">Visualizing
-Probability Distributions with <code>ggplot</code></h3>
-<p>Created using <code>bookdown</code>, an R package, this introductory
-guide teaches students about probability theory and how to visualize its
-concepts.</p>
-<p><a
-href="https://ben-j-wallace.github.io/probability-distributions/">Read</a></p>
-<div class="sourceCode" id="cb1"><pre
-class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<h3 id="visualizing-probability-distributions-with-ggplot">Visualizing Probability Distributions with <code>ggplot</code></h3>
+<p>Created using <code>bookdown</code>, an R package, this introductory guide teaches students about probability theory and how to visualize its concepts.</p>
+<p><a href="https://ben-j-wallace.github.io/probability-distributions/">Read</a></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
