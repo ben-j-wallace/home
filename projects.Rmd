@@ -2,15 +2,15 @@
 title: "Works"
 ---
 
-Read below about some of the papers and projects that I have worked on over the past three years. If you see anything that interests you or if you want to work together, feel free to contact me at `ben [dot] wallace [at] duke.edu`.
+Read below about some of the papers and projects that I have completed. If you see anything that interests you or if you want to work together, feel free to contact me at `ben [dot] wallace [at] duke.edu`.
 
 ## Working Papers
 
-### Teaching Race: White Adolescents and Learning Race in History Curriculum 
+### Racial Ethnic Socialization: How White Adolescents Learn and Discuss Race
 
 *Independent study, supervised by [Dr. Sarah Gaither](https://scholars.duke.edu/person/sarah.gaither)*
 
-> This paper begins with a review of racial and ethnic socialization (RES), particularly among white adolescents, and directs it towards a discussion of how pedagogy exists as race-making and socializing practice. Synthesis of psychological, sociological, and educational scholarship reveals that teachers have a limited effect on white adolescents’ interpretations of history
+> This paper begins with a review of racial and ethnic socialization (RES), focused on middle and late childhood. Reviewing primarily qualitiative studies, I find that teachers and the school environments minimally shape white adolescents’ interpretations of history. White adolescents are more likely to adopt beliefs shared by peers and their families. 
 
 ### For Pride and for Profit: White Elites and Motivations for Urban Segregation
 
