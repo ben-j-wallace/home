@@ -1,6 +1,6 @@
 ---
 title: "Ben Wallace"
-image: "imgs/me_2025.jpg  "
+image: "imgs/me_2025.  "
 description: |
   Ben Wallace
 links:

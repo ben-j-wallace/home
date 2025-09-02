@@ -1,0 +1,50 @@
+
+# --
+title: "Works"
+# --
+
+Read below about some of the papers and projects that I have completed. If you see anything that interests you or if you want to work together, feel free to contact me at `ben [dot] wallace [at] duke.edu`.
+
+## Working Papers
+
+### Racial Ethnic Socialization: How White Adolescents Learn and Discuss Race
+
+*Independent study, supervised by [Dr. Sarah Gaither](https://scholars.duke.edu/person/sarah.gaither)*
+
+> This paper begins with a review of racial and ethnic socialization (RES), focused on middle and late childhood. Reviewing primarily qualitiative studies, I find that teachers and the school environments minimally shape white adolescents’ interpretations of history. White adolescents are more likely to adopt beliefs shared by peers and their families. 
+
+### For Pride and for Profit: White Elites and Motivations for Urban Segregation
+
+> The history of Chicago’s white elites not only interrupts the popular notion that segregation was limited to the Jim Crow South, but also that segregation in northern cities resulted from New-Deal age practices. By the 1930’s, practices enforcing the National Housing Act like red-lining bolstered pre-existing projects of white self-interest.
+
+### Collective Violence: Mob Formation of Lynchings
+
+> After reviewing the history of lynching and sociological perspectives of mob formation, I examine how conflict threat perspectives can incorporate more recent theoretical developments. Using an ordered logistic model, I find that Black lynching victims as well as those accused of murder and violations of the interracial sexual color line drew larger mob sizes in the United States, supporting perspectives that tie lynchings to the reinforcement of national white supremacist ideologies.
+
+[Read](https://dssoc.github.io/project_examples/ben_wallace.html)
+
+### Data Visualizations in the Age of Mass Incarceration
+
+> In the century since the “American Negro Exhibit,” the practice of data visualization has dramatically evolved in tandem with developments in graphic design, social statistics, and the statistical knowledge state. This paper addresses the prospects, limitations, and implications of using data visualization in representing bodies and discourses surrounding the carceral system. Specifically, I ask how these portraits intervene in representations of those the system entangles, a system which so frequently neglects humanity to those it holds captive.
+
+[Read](https://ben-j-wallace.github.io/carceral-system-visualization/)
+
+## Projects
+
+### Archival Research, Shame of Chicago Documentary
+
+[Watch](https://www.shameofchicago.org/)
+
+### Closeted Podcast
+
+Five years after the Supreme Court granted marriage equality to same-sex couples, I speak with a closeted student and learn about how internalized homophobia persists in our current era.
+
+[Listen](https://soundcloud.com/benjwallace/closeted)
+
+### Visualizing Probability Distributions with `ggplot`
+
+Created using `bookdown`, an R package, this introductory guide teaches students about probability theory and how to visualize its concepts. 
+
+[Read](https://ben-j-wallace.github.io/probability-distributions/)
+
+
