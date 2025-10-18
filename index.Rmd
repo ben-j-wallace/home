@@ -1,11 +1,13 @@
 ---
 title: "Ben Wallace"
-image: "imgs/me_2025.  "
+image: "imgs/me_2025.jpg"
 description: |
   Ben Wallace
 links:
-  - label: Resume
+  - label: Linkedin
     url: "https://www.linkedin.com/in/wallacebenjamin/"
+  - label: CV
+    url: "..."
   - label: Github
     url: "https://github.com/ben-j-wallace"
   - label: Contact
@@ -19,8 +21,8 @@ self_contained: false
 
 ## About Me
 
-I am a researcher at [MDRC](https://www.mdrc.org/about/people/ben-wallace) based in San Francisco and study inequality. 
+I am a researcher at [MDRC](https://www.mdrc.org/about/people/ben-wallace) based in San Francisco. I use mixed methods to study criminal justice reform and anti-poverty programs. 
 
-I graduated with a B.A. at the intersection of sociology, ethnic studies, and history from Duke University. It is titled: *[Constructions of Race and Racial Attitudes in the United States](https://drive.google.com/file/d/17N7oFHydCEBg0QAvFhHnpAuuQwTG5Xh3/view?usp=sharing)*.
+Before MDRC, I graduated with a B.A. in a program at the intersection of sociology, ethnic studies, and history from Duke University. Read more about it [here](https://drive.google.com/file/d/17N7oFHydCEBg0QAvFhHnpAuuQwTG5Xh3/view?usp=sharing).
 
-Outside of research, I love going to concerts, reading, and exploring the Bay Area's amazing scenery.
+Outside of research, I love going to jazz concerts, reading, and exploring the Bay Area's amazing scenery.
